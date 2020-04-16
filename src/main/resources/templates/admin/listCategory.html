@@ -13,15 +13,20 @@
 
         //ViewModel
         var vue = new Vue({
+            //绑定数据区
             el: '#workingArea',
+            //绑定数据源
             data: data4Vue,
             mounted:function(){ //mounted　表示这个 Vue 对象加载成功了
                 this.list();
             },
             methods: {
                 list:function(){
+                    //调用的接口
                     var url =  this.uri;
+                    //发起异步请求
                     axios.get(url).then(function(response) {
+                        //获取返回的json list数据
                         vue.beans = response.data;
                     });
                 }
