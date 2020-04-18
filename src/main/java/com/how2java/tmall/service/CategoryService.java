@@ -42,4 +42,8 @@ public class CategoryService {
     public void add(Category bean) {
         categoryDAO.save(bean);
     }
+
+    public void delete(int id) {
+        categoryDAO.delete(id);
+    }
 }
