@@ -13,7 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
+//增加： post
+//删除： delete
+//修改： put
+//查询： get
 @RestController
 public class CategoryController {
     @Autowired
@@ -36,14 +39,32 @@ public class CategoryController {
     }
 
     @DeleteMapping("/categories/{id}")
-    public String delete(@PathVariable("id") int id, HttpServletRequest request)  throws Exception {
+    public String delete(@PathVariable("id") int id, HttpServletRequest request) throws Exception {
         //删除数据
         categoryService.delete(id);
         //删除文件
-        File  imageFolder= new File(request.getServletContext().getRealPath("img/category"));
-        File file = new File(imageFolder,id+".jpg");
+        File imageFolder = new File(request.getServletContext().getRealPath("img/category"));
+        File file = new File(imageFolder, id + ".jpg");
         file.delete();
         return null;
+    }
+
+    @GetMapping("/categories/{id}")
+    public Category get(@PathVariable("id") int id) throws Exception {
+        Category bean = categoryService.get(id);
+        return bean;
+    }
+
+    @PutMapping("/categories/{id}")
+    public Object update(Category bean, MultipartFile image,HttpServletRequest request) throws Exception {
+        String name = request.getParameter("name");
+        bean.setName(name);
+        categoryService.update(bean);
+
+        if(image!=null) {
+            saveOrUpdateImageFile(bean, image, request);
+        }
+        return bean;
     }
 
     public void saveOrUpdateImageFile(Category bean, MultipartFile image, HttpServletRequest request)
